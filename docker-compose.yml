@@ -31,6 +31,7 @@ services:
   rqworker:
     build: .
     restart: unless-stopped
+    entrypoint: /entrypoint-worker.sh
     command: python manage.py rqworker default
     volumes:
       - media_data:/app/media
