@@ -15,4 +15,4 @@ venv/
 .vscode/
 test-segment.ts
 test-thumb.jpg
-cookies.txt
+cookies*.txt
