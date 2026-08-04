@@ -7,13 +7,13 @@ from django.utils.http import urlsafe_base64_encode
 def build_activation_link(user):
     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
-    return f"{settings.FRONTEND_URL}/activate/{uidb64}/{token}/"
+    return f"{settings.FRONTEND_URL}/pages/auth/activate.html?uid={uidb64}&token={token}"
 
 
 def build_password_reset_link(user):
     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
-    return f"{settings.FRONTEND_URL}/reset-password/{uidb64}/{token}/"
+    return f"{settings.FRONTEND_URL}/pages/auth/confirm_password.html?uid={uidb64}&token={token}"
 
 
 def set_auth_cookies(response, access_token, refresh_token):
