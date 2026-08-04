@@ -92,7 +92,8 @@ class LogoutView(APIView):
         if refresh_token is None:
             return Response({"detail": "Refresh-Token fehlt."}, status=400)
         self._blacklist_token(refresh_token)
-        response = Response({"detail": "Logout successful! All tokens will be deleted."}, status=200)
+        body = {"detail": "Logout successful! All tokens will be deleted."}
+        response = Response(body, status=200)
         return delete_auth_cookies(response)
 
     def _blacklist_token(self, refresh_token):
@@ -116,8 +117,11 @@ class CookieTokenRefreshView(APIView):
             refresh = RefreshToken(refresh_token)
         except TokenError:
             return Response({"detail": "Ungültiger Refresh-Token."}, status=401)
-        response = Response({"detail": "Token refreshed", "access": str(refresh.access_token)}, status=200)
-        response.set_cookie("access_token", str(refresh.access_token), httponly=True, samesite="Lax")
+        body = {"detail": "Token refreshed", "access": str(refresh.access_token)}
+        response = Response(body, status=200)
+        response.set_cookie(
+            "access_token", str(refresh.access_token), httponly=True, samesite="Lax"
+        )
         return response
 
 

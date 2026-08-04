@@ -1,7 +1,6 @@
 from django.http import FileResponse, Http404
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .functions import get_manifest_path, get_segment_path, is_valid_resolution
