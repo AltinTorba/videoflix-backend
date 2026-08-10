@@ -6,6 +6,8 @@ media/videos/*
 media/thumbnails/*
 !media/videos/.gitkeep
 !media/thumbnails/.gitkeep
+static/*
+!static/.gitkeep
 staticfiles/
 .venv/
 venv/
@@ -13,6 +15,6 @@ venv/
 .DS_Store
 .idea/
 .vscode/
+cookies*.txt
 test-segment.ts
 test-thumb.jpg
-cookies*.txt

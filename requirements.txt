@@ -7,7 +7,7 @@ django-rq==2.10.2
 rq==1.16.2
 redis==5.0.4
 django-cors-headers==4.3.1
-python-decouple==3.8
+python-dotenv==1.0.1
 Pillow==10.3.0
 gunicorn==22.0.0
 whitenoise==6.7.0

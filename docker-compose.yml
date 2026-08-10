@@ -1,47 +1,42 @@
 services:
+
   db:
-    image: postgres:16-alpine
-    restart: unless-stopped
+    image: postgres:latest
+    container_name: videoflix_database
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
 
   redis:
-    image: redis:7-alpine
-    restart: unless-stopped
+    image: redis:latest
+    container_name: videoflix_redis
+    volumes:
+      - redis_data:/data
 
   web:
-    build: .
-    restart: unless-stopped
-    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000
-    volumes:
-      - media_data:/app/media
-      - static_data:/app/staticfiles
-    env_file:
-      - .env
-    depends_on:
-      - db
-      - redis
-    ports:
-      - "8080:8000"
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    env_file: .env
+    container_name: videoflix_backend
 
-  rqworker:
-    build: .
-    restart: unless-stopped
-    entrypoint: /entrypoint-worker.sh
-    command: python manage.py rqworker default
     volumes:
-      - media_data:/app/media
-    env_file:
-      - .env
+      - .:/app
+      - videoflix_media:/app/media
+      - videoflix_static:/app/static
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
     depends_on:
       - db
       - redis
 
 volumes:
   postgres_data:
-  media_data:
-  static_data:
+  redis_data:
+  videoflix_media:
+  videoflix_static:
