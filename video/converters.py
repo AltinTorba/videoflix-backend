@@ -7,6 +7,11 @@ from .functions import (
     get_thumbnail_output_path,
 )
 
+# "nice -n 15": FFMPEG bekommt eine niedrigere CPU-Priorität, damit der
+# Gunicorn-Prozess (im selben Container) auch während der Konvertierung
+# weiterhin auf Anfragen reagieren kann (verhindert WORKER TIMEOUT).
+NICE_PREFIX = ["nice", "-n", "15"]
+
 
 def convert_to_hls(source_path, movie_id, resolution):
     settings_for_res = RESOLUTION_SETTINGS[resolution]
@@ -18,8 +23,9 @@ def convert_to_hls(source_path, movie_id, resolution):
 
 
 def build_ffmpeg_hls_command(source_path, settings_for_res, output_dir):
-    return [
+    return NICE_PREFIX + [
         "ffmpeg", "-y", "-i", str(source_path),
+        "-threads", "2",
         "-vf", f"scale={settings_for_res['scale']}",
         "-c:a", "aac", "-ar", "48000", "-c:v", "h264",
         "-b:v", settings_for_res["bitrate"], "-crf", "20",
@@ -31,7 +37,7 @@ def build_ffmpeg_hls_command(source_path, settings_for_res, output_dir):
 
 def generate_thumbnail(source_path, movie_id):
     output_path = get_thumbnail_output_path(movie_id)
-    command = [
+    command = NICE_PREFIX + [
         "ffmpeg", "-y", "-i", str(source_path),
         "-ss", "00:00:02", "-vframes", "1", str(output_path),
     ]
