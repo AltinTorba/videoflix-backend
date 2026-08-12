@@ -18,3 +18,4 @@ venv/
 cookies*.txt
 test-segment.ts
 test-thumb.jpg
+ct.txt
