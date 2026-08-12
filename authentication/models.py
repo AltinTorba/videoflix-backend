@@ -5,7 +5,7 @@ from .managers import UserManager
 
 
 class User(AbstractUser):
-    """Custom User: Login erfolgt über die E-Mail, nicht über den Username."""
+    """Custom user model: login is done via email instead of username."""
 
     username = None
     email = models.EmailField(unique=True)
@@ -17,4 +17,5 @@ class User(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
+        """Return the email address as the string representation."""
         return self.email

@@ -2,6 +2,8 @@ from django.db import models
 
 
 class Video(models.Model):
+    """Represents a video, including its source file and HLS conversion status."""
+
     STATUS_PENDING = "pending"
     STATUS_PROCESSING = "processing"
     STATUS_READY = "ready"
@@ -28,4 +30,5 @@ class Video(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self):
+        """Return the title as the string representation."""
         return self.title
